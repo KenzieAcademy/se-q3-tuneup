@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Crossword Solver Program"""
+"""Tuneup assignment"""
 
 __author__ = "???"
 
 
-def profile():
+def profile(func):
+    """A function that can be used as a decorator to meausre performance"""
+    import cProfile, pstats, io
     raise NotImplementedError("Complete this decorator function")
 
 
@@ -33,6 +35,11 @@ def find_duplicate_movies(src):
         if is_duplicate(movie, movies):
             duplicates.append(movie)
     return duplicates
+
+
+def timeit_helper():
+    """Part A:  Obtain some profiling measurements using timeit"""
+    # YOUR CODE GOES HERE
 
 
 def main():
