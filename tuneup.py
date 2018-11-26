@@ -4,10 +4,13 @@
 
 __author__ = "???"
 
+import cProfile
+import pstats
+
 
 def profile(func):
     """A function that can be used as a decorator to meausre performance"""
-    import cProfile, pstats, io
+
     raise NotImplementedError("Complete this decorator function")
 
 
@@ -18,10 +21,10 @@ def read_movies(src):
         return f.read().splitlines()
 
 
-def is_duplicate(needle, haystack):
+def is_duplicate(title, movies):
     """Case insensitive search within a list"""
-    for title in haystack:
-        if needle.lower() == title.lower():
+    for movie in movies:
+        if movie.lower() == title.lower():
             return True
     return False
 
