@@ -9,8 +9,7 @@ import pstats
 
 
 def profile(func):
-    """A function that can be used as a decorator to meausre performance"""
-
+    """A function that can be used as a decorator to measure performance"""
     raise NotImplementedError("Complete this decorator function")
 
 
