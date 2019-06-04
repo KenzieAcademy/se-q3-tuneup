@@ -13,7 +13,7 @@ def profile(func):
     """A function that can be used as a decorator to measure performance"""
     pr = cProfile.Profile()
     pr.enable()
-    pr.run(f'{func}')
+    pr.run(func)
     pr.disable
     sortby = 'cumulative'
     ps = pstats.Stats(pr).sort_stats(sortby)
