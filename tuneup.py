@@ -6,22 +6,26 @@ __author__ = "???"
 
 import cProfile
 import pstats
+import functools
 
 
 def profile(func):
     """A function that can be used as a decorator to measure performance"""
+    # You need to understand how decorators are constructed and used.
+    # Be sure to review the lesson material on decorators, they are used
+    # extensively in Django and Flask.
     raise NotImplementedError("Complete this decorator function")
 
 
 def read_movies(src):
-    """Read a list of movie titles"""
+    """Returns a list of movie titles"""
     print('Reading file: {}'.format(src))
     with open(src, 'r') as f:
         return f.read().splitlines()
 
 
 def is_duplicate(title, movies):
-    """Case insensitive search within a list"""
+    """returns True if title is within movies list"""
     for movie in movies:
         if movie.lower() == title.lower():
             return True
