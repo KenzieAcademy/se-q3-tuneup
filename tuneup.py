@@ -7,17 +7,24 @@ __author__ = "Tyler Ward"
 import cProfile
 import pstats
 import timeit
+from collections import Counter
+import functools
 
 
 def profile(func):
     """A function that can be used as a decorator to measure performance"""
-    pr = cProfile.Profile()
-    pr.enable()
-    pr.run(func)
-    pr.disable
-    sortby = 'cumulative'
-    ps = pstats.Stats(pr).sort_stats(sortby)
-    ps.print_stats()
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        pr = cProfile.Profile()
+        pr.enable()
+        result = func(*args, **kwargs)
+        pr.disable()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr).sort_stats(sortby)
+        ps.print_stats(10)
+        return result
+    return inner
+
 
 
 def read_movies(src):
@@ -29,18 +36,50 @@ def read_movies(src):
 
 def is_duplicate(title, movies):
     """Case insensitive search within a list"""
-    if title in movies:
-        return True
-    return False
+    return title in movies
 
 
-def find_duplicate_movies(src):
+def sort_movies(src):
+    result = sorted([
+        movie.lower() 
+            for movie in read_movies(src)
+    ])
+
+    assert result is not None
+    return result
+
+@profile
+def find_duplicate_movies_zip(src):
+    movies = sort_movies(src)
+
+    return [
+        m1 
+            for m1, m2 in zip(movies[1:], movies[:-1])
+                 if m1 == m2
+    ]
+
+
+@profile
+def find_duplicate_movies_counter(src):
     """Returns a list of duplicate movies from a src list"""
     movies = read_movies(src)
 
-    duplicates = []
+    movie_counter = Counter(movies)
 
-    seen = {}
+    duplicates = [
+        movie 
+            for movie, count in movie_counter.items() 
+                if count > 1
+    ]
+
+    return duplicates
+
+
+@profile
+def find_duplicate_movies_boss(src):
+    movies = read_movies(src)
+    duplicates = []
+    seen={}
     for movie in movies:
         if movie not in seen:
             seen[movie] = 1
@@ -49,16 +88,31 @@ def find_duplicate_movies(src):
                 duplicates.append(movie)
             seen[movie] += 1
 
-#     duplicates = [
-#             movie 
-#             for index, movie in enumerate(movies)
-#                 if is_duplicate(movie, movies[:index])
-#         ]
+    return duplicates
 
-#     while movies:
-#         movie = movies.pop()
-#         if is_duplicate(movie, movies):
-#             duplicates.append(movie)
+
+@profile
+def find_duplicate_movies_list_comp(src):
+    movies = read_movies(src)
+
+    duplicates = [
+            movie 
+            for index, movie in enumerate(movies)
+                if is_duplicate(movie, movies[:index])
+        ]
+    
+    return duplicates
+
+
+@profile 
+def find_duplicate_movies_while(src):
+    movies = read_movies(src)
+    duplicates = []
+
+    while movies:
+        movie = movies.pop()
+        if is_duplicate(movie, movies):
+            duplicates.append(movie)
 
     return duplicates
 
@@ -76,11 +130,19 @@ def timeit_helper():
 
 def main():
     """Computes a list of duplicate movie entries"""
-    result = find_duplicate_movies('movies.txt')
-    print('Found {} duplicate movies:'.format(len(result)))
-    print('\n'.join(result))
-    profile("find_duplicate_movies('movies.txt')")
-    timeit_helper()
+    movie_funcs = [
+        find_duplicate_movies_boss, 
+        find_duplicate_movies_counter,
+        find_duplicate_movies_list_comp,
+        find_duplicate_movies_while,
+        find_duplicate_movies_zip
+    ]
+    for func in movie_funcs:
+        print(f'\n\nHey this is the function {func.__name__}:\n\n')
+        result = func('movies.txt')
+        print('Found {} duplicate movies:'.format(len(result)))
+        print('\n'.join(result))
+    # timeit_helper()
 
 
 if __name__ == '__main__':
