@@ -37,23 +37,16 @@ def read_movies(src):
         return f.read().splitlines()
 
 
-def is_duplicate(title, movies):
-    """returns True if title is within movies list"""
-    for movie in movies:
-        if movie.lower() == title.lower():
-            return True
-    return False
-
-
 @profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list"""
-    movies = read_movies(src)
+    movies = sorted(read_movies(src))
     duplicates = []
-    while movies:
-        movie = movies.pop()
-        if is_duplicate(movie, movies):
+    current_title = ""
+    for movie in movies:
+        if movie == current_title and movie not in duplicates:
             duplicates.append(movie)
+        current_title = movie
     return duplicates
 
 
