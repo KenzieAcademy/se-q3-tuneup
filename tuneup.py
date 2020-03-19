@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Tuneup assignment"""
 
-__author__ = "benjmm"
+__author__ = "benjmm with help from knmarvel and Janell-Huyck's wonderful guide"
 
 import cProfile
 import pstats
@@ -16,10 +16,18 @@ if sys.version_info[0] < 3:
 
 def profile(func):
     """A function that can be used as a decorator to measure performance"""
-    # You need to understand how decorators are constructed and used.
-    # Be sure to review the lesson material on decorators, they are used
-    # extensively in Django and Flask.
-    raise NotImplementedError("Complete this decorator function")
+    @functools.wraps(func)
+    def wrapper_fun(*args, **kwargs):
+        profile_object = cProfile.Profile()
+        profile_object.enable()
+        result = func(*args, **kwargs)
+        profile_object.disable()
+        stats_object = pstats.Stats(profile_object)
+        stats_object.strip_dirs()
+        stats_object.sort_stats('cumulative')
+        stats_object.print_stats()
+        return(result)
+    return wrapper_fun
 
 
 def read_movies(src):
@@ -37,6 +45,7 @@ def is_duplicate(title, movies):
     return False
 
 
+@profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list"""
     movies = read_movies(src)
@@ -63,7 +72,7 @@ def timeit_helper():
 
 def main():
     """Computes a list of duplicate movie entries"""
-    timeit_helper()
+    # timeit_helper()
     result = find_duplicate_movies('movies.txt')
     print('Found {} duplicate movies:'.format(len(result)))
     print('\n'.join(result))
