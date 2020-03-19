@@ -2,11 +2,15 @@
 # -*- coding: utf-8 -*-
 """Tuneup assignment"""
 
-__author__ = "???"
+__author__ = "benjmm with help from knmarvel and Janell-Huyck's wonderful guide"
 
 import cProfile
 import pstats
 import functools
+import sys
+
+if sys.version_info[0] < 3:
+    raise Exception("This program requires python3 interpreter")
 
 
 def profile(func):
