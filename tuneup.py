@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tuneup assignment"""
+"""Tuneup assignment
+
+Use the timeit and cProfile libraries to find bad code.
+"""
 
 __author__ = "???"
 
@@ -10,22 +13,23 @@ import functools
 
 
 def profile(func):
-    """A function that can be used as a decorator to measure performance"""
-    # You need to understand how decorators are constructed and used.
-    # Be sure to review the lesson material on decorators, they are used
-    # extensively in Django and Flask.
+    """A cProfile decorator function that can be used to
+    measure performance.
+    """
+    # Be sure to review the lesson material on decorators.
+    # You need to understand how they are constructed and used.
     raise NotImplementedError("Complete this decorator function")
 
 
 def read_movies(src):
-    """Returns a list of movie titles"""
-    print('Reading file: {}'.format(src))
+    """Returns a list of movie titles."""
+    print(f'Reading file: {src}')
     with open(src, 'r') as f:
         return f.read().splitlines()
 
 
 def is_duplicate(title, movies):
-    """returns True if title is within movies list"""
+    """Returns True if title is within movies list."""
     for movie in movies:
         if movie.lower() == title.lower():
             return True
@@ -33,7 +37,7 @@ def is_duplicate(title, movies):
 
 
 def find_duplicate_movies(src):
-    """Returns a list of duplicate movies from a src list"""
+    """Returns a list of duplicate movies from a src list."""
     movies = read_movies(src)
     duplicates = []
     while movies:
@@ -44,14 +48,15 @@ def find_duplicate_movies(src):
 
 
 def timeit_helper():
-    """Part A:  Obtain some profiling measurements using timeit"""
+    """Part A: Obtain some profiling measurements using timeit."""
     # YOUR CODE GOES HERE
+    pass
 
 
 def main():
-    """Computes a list of duplicate movie entries"""
+    """Computes a list of duplicate movie entries."""
     result = find_duplicate_movies('movies.txt')
-    print('Found {} duplicate movies:'.format(len(result)))
+    print(f'Found {len(result)} duplicate movies:')
     print('\n'.join(result))
 
 
