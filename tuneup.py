@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tuneup assignment"""
+"""Tuneup assignment
+
+Use the timeit and cProfile libraries to find bad code.
+"""
 
 __author__ = "???"
 
@@ -10,9 +13,11 @@ import functools
 
 
 def profile(func):
-    """A function that can be used as a decorator to measure performance."""
-    # Be sure to review the lesson material on decorators. You
-    # need to understand how they are constructed and used.
+    """A cProfile decorator function that can be used to
+    measure performance.
+    """
+    # Be sure to review the lesson material on decorators.
+    # You need to understand how they are constructed and used.
     raise NotImplementedError("Complete this decorator function")
 
 
@@ -24,7 +29,7 @@ def read_movies(src):
 
 
 def is_duplicate(title, movies):
-    """returns True if title is within movies list."""
+    """Returns True if title is within movies list."""
     for movie in movies:
         if movie.lower() == title.lower():
             return True
