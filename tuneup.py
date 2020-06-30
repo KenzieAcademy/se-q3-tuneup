@@ -5,7 +5,8 @@
 Use the timeit and cProfile libraries to find bad code.
 """
 
-__author__ = "Iris Hoffmeyer and StackOverflow contributor (https://stackoverflow.com/a/9835819)"
+__author__ = "Iris Hoffmeyer and StackOverflow contributors\
+(https://stackoverflow.com/a/9835819, https://stackoverflow.com/a/282589)"
 
 import cProfile
 import pstats
@@ -43,10 +44,10 @@ def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list."""
     movies = read_movies(src)
     duplicates = []
-    seen = set()
+    seen = {}
     for movie in movies:
         if movie not in seen:
-            seen.add(movie)
+            seen[movie] = True
         else:
             duplicates.append(movie)
     return duplicates
